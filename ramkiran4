@@ -1,0 +1,274 @@
+PROCESS SCHEDULING ALGORITHMS
+
+
+
+
+
+21.A program to implement FCFS algorithm..
+
+
+
+
+#include<stdio.h>
+float fcfs(int[],int);
+main()
+{
+int i,n,p[10],bt[10],bt1[10];
+printf("enter no of processes");
+scanf("%d",&n);
+for(i=1;i<=n;i++)
+{
+printf("enter the processor and burst time");
+scanf("%d%d",&p[i],&bt[i]);
+bt1[i]=bt[i];
+}
+fcfs(bt,n);
+}
+float fcfs(int bt[],int n)
+{
+int wt[10],tat[10],i;
+float twt=0,ttat=0;
+wt[1]=0;
+for(i=1;i<=n;i++)
+{
+tat[i]=wt[i]+bt[i];
+wt[i+1]=bt[i]+wt[i];
+}
+for(i=1;i<=n;i++)
+{
+twt=twt+wt[i];
+ttat=ttat+tat[i];
+}
+for(i=1;i<=n;i++)
+{
+printf("%d\t%d\t%d\n",bt[i],wt[i],tat[i]);
+}
+printf("\n\n average waiting time is %f",twt);
+printf("\n\n average turn sround time is %f",ttat);
+}
+
+
+
+~
+
+
+
+
+
+
+
+"fcfs.c" 40L, 620C written
+[dmgv@LinuxServer ~]$ cc fcfs.c
+[dmgv@LinuxServer ~]$ ./a.out
+enter no of processes 3
+enter the processor and burst time 1 6
+enter the processor and burst time 2 15
+enter the processor and burst time 3 8
+6       0       6
+15      6       21
+8       21      29
+
+
+ average waiting time is 27.000000
+
+ average turn sround time is 56.000000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22. .A program to implement SJF algorithm
+
+
+
+
+
+#include<stdio.h>
+main()
+{
+int i,n,bt[10],wt[10],tat[20],j,t,s;
+int p[10];
+float twt=0,ttat=0;
+printf("enter no of process");
+scanf("%d",&n);
+for(i=1;i<=n;i++)
+{
+printf("enter the processor and bursttime");
+scanf("%d%d",&p[i],&bt[i]);
+}
+for(i=1;i<=n;i++)
+{
+for(j=i+1;j<=n;j++)
+{
+if(bt[i]>bt[j])
+{
+t=bt[i];s=p[i];
+bt[i]=bt[j];p[i]=p[j];
+bt[j]=t;p[j]=s;
+}
+}
+}
+wt[1]=0;
+for(i=1;i<=n;i++)
+{
+tat[i]=wt[i]+bt[i];
+wt[i+1]=tat[i];
+}
+for(i=1;i<=n;i++)
+{
+twt=twt+wt[i];
+ttat=ttat+tat[i];
+}
+printf("proc\tbt\twt\ttat\n");
+for(i=1;i<=n;i++)
+{
+printf("p%d\t%d\t%d\t%d\n",p[i],bt[i],wt[i],tat[i]);
+}
+printf("\n\n average waiting time is%f",twt);
+printf("\n\n average turn arround time is%f",ttat);
+}
+
+~
+~
+~
+
+
+
+"SJF.c" 45L, 688C written
+[dmgv@LinuxServer ~]$ cc SJF.c
+[dmgv@LinuxServer ~]$ ./a.out
+enter no of process 3
+enter the processor and bursttime 11 8
+enter the processor and bursttime 22 8
+enter the processor and bursttime 33 5
+proc    bt      wt      tat
+p33     5       0       5
+p22     8       5       13
+p11     8       13      21
+
+
+ average waiting time is18.000000
+
+ average turn arround time is39.000000[dmgv@LinuxServer ~]$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+23.A program to Round Robin scheduling.
+
+
+#include<stdio.h>
+main()
+{
+int bt[10],n,t[10],wt[10],sum=0,i,tq,tat[10],x=0;
+float tat1=0,twt=0;
+printf("enter time quatum");
+scanf("%d",&tq);
+printf("enter number of processors");
+scanf("%d",&n);
+printf("enter cpu burst times");
+for(i=1;i<=n;i++)
+{
+scanf("%d",&bt[i]);
+t[i]=bt[i];
+sum=sum+bt[i];
+}
+while(sum>0)
+{
+for(i=1;i<=n;i++)
+{
+if(bt[i]!=0)
+{
+if(bt[i]>tq)
+{
+x=x+tq;
+bt[i]=bt[i]-tq;
+sum=sum-tq;
+}
+else
+{
+x=x+bt[i];
+sum=sum-bt[i];
+bt[i]=0;
+tat[i]=x;
+wt[i]=tat[i]-t[i];
+}
+}
+}
+}
+printf("jobS\t cpu turn time\t waiting time");
+for(i=1;i<=n;i++)
+{
+printf("\n%d\t%d\t%d\t%d\t",i,t[i],tat[i],wt[i]);
+}
+for(i=1;i<=n;i++)
+{
+tat1=tat1+tat[i];
+twt=twt+wt[i];
+}
+tat1=tat1/3;
+twt=twt/3;
+printf("\n average turn around time=%f",tat1);
+printf("\n average waiting time=%f",twt);
+}
+
+
+
+
+
+
+
+~
+
+"round.c" 57L, 776C written
+[dmgv@LinuxServer ~]$ cc round.c
+[dmgv@LinuxServer ~]$ ./a.out
+enter time quatum 4
+enter number of processors 4
+enter cpu burst times 6 3 8 5
+jobS     cpu turn time   waiting time
+1       6       17      11
+2       3       7       4
+3       8       21      13
+4       5       22      17
+ average turn around time=22.333334
+ average waiting time=15.000000
+
+
+
+
+
+
+
+
+
+
+
